@@ -35,6 +35,21 @@
     </div>
 </section>
 
+<section class="director-section">
+    <div class="section-header container">
+        <h2 class="section-title">Режиссёры</h2>
+        <a href="/" class="view-all">Смотреть все <i class="fas fa-chevron-right"></i></a>
+    </div>
+
+    <div class="director-grid container">
+        {% for director in directors %}
+        <a href="{% url 'director' director.id %}" class="director-card">
+            <h3 class="director-title">{{ director.first_name }} {{ director.last_name }}</h3>
+        </a>
+        {% endfor %}
+    </div>
+</section>
+
 <section class="genres-section">
     <div class="section-header container">
         <h2 class="section-title">Жанры</h2>

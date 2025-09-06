@@ -1,0 +1,33 @@
+{% extends 'movies/base.html' %}
+{% load static %}
+
+{% block content %}
+<div class="container">
+    <div class="director-detail-card">
+        <div class="director">
+            <div class="poster-placeholder">
+                <i class="fas fa-film"></i>
+            </div>
+        </div>
+
+        <div class="director-detail-info">
+            <h1 class="director-detail-title">{{ director.first_name }} {{ director.last_name }}</h1>
+
+            <div class="director-meta">
+                <span>Дата рождения: {{ director.birth_date }}</span>
+            </div>
+
+            <p class="director-detail-desc">{{ director.biography }}</p>
+
+            <h4>Фильмы:</h4>
+            {% for movie in director.directed_movies.all %}
+            <div class="movie-director">
+                <p>
+                    <a href="#">{{ movie.title }}</a>
+                </p>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</div>
+{% endblock content %}
