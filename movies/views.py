@@ -11,11 +11,13 @@ menu = [
 
 def index(request):
     movies = Movie.objects.order_by('-time_create').select_related('director').all()[:4]
+    directors = Director.objects.all()
     genres = Genre.objects.all()
 
     param = {
         'menu': menu, 
         'movies': movies,
+        'directors': directors,
         'genres': genres, 
         'title': 'Главная страница'
     }
@@ -48,7 +50,11 @@ def show_movie(request, post_id):
     return render(request, 'movies/movie_detail.html', context=param)
 
 def show_director(request, director_id):
-    return HttpResponse(f'Страница режиссёра с ID = {director_id}')
+    director = get_object_or_404(Director, pk=director_id)
+    context = {
+        'director': director,
+    }
+    return render(request, 'movies/director_detail.html', context)
 
 def movie_by_genre(request, genre_id):
     genre = get_object_or_404(Genre, pk=genre_id)
