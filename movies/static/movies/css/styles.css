@@ -95,7 +95,7 @@ body {
 }
 
 .movie-card:hover {
-    transform: scale(1.2); /* Увеличение размера на 20% */
+    transform: scale(1.05); /* Увеличение размера на 5% */
 }
 
 .movie-poster {
