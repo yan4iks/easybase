@@ -36,4 +36,11 @@ class GenreAdmin(admin.ModelAdmin):
 
 @admin.register(Director)
 class DirectorAdmin(admin.ModelAdmin):
-    pass
+    fieldsets = (
+        ('Личные данные',{
+            'fields': ('first_name', 'last_name', 'birth_date')
+        }),
+        ('Информация', {
+            'fields': ('biography', 'photo')
+        }),       
+    )
