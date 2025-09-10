@@ -1,7 +1,8 @@
 from django.http import HttpResponse, HttpResponseNotFound
 from django.shortcuts import redirect, render, get_object_or_404
-from django.contrib.auth.forms import UserCreationForm
-
+from django.contrib.auth import login, logout
+from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
+from .forms import CustomUserCreationForm, CustomAuthenticationForm
 
 from .models import Movie, Director, Genre
 
@@ -10,7 +11,13 @@ menu = [
     {'title': 'О сайте', 'url_name': 'about'},
     {'title': 'Добавить фильм', 'url_name': 'add_movie'},
     {'title': 'Регистрация', 'url_name': 'register'},
+    {'title': 'Войти', 'url_name': 'login'},
+    {'title': 'Выйти', 'url_name': 'logout'},
 ]
+
+def logout_user(request):
+    logout(request)
+    return redirect('home')
 
 def index(request):
     movies = Movie.objects.order_by('-time_create').select_related('director').all()[:4]
@@ -70,6 +77,24 @@ def movie_by_genre(request, genre_id):
     }
     return render(request, 'movies/movies_by_category.html', context=param)
 
+def login_user(request):
+    if request.method == 'POST':
+        form = CustomAuthenticationForm(request.POST)
+        if form.is_valid():
+            user = form.get_user()
+            login(request, user)
+            return redirect('home')
+    else:
+        form = CustomAuthenticationForm()
+    
+    param = {
+        'menu': menu,
+        'title': 'Авторизация',
+        'form': form
+    }
+
+    return render(request, 'movies/register.html', context=param)
+
 def register(request):
     if request.method == 'POST':
         form = UserCreationForm(request.POST)
@@ -77,7 +102,7 @@ def register(request):
             form.save()
             return redirect('home')
     else:
-        form = UserCreationForm()
+        form = CustomUserCreationForm()
     
     param = {
         'menu': menu,
@@ -86,6 +111,7 @@ def register(request):
     }
 
     return render(request, 'movies/register.html', context=param)
+
 
 def pageNotFound(request, exception):
     return HttpResponseNotFound('Страница не найдена')
